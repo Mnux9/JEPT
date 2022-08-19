@@ -1,5 +1,14 @@
 import PySimpleGUI as sg
 from pathlib import Path
+import datetime
+from datetime import timedelta
+
+
+timestart = datetime.datetime.now()
+timestart = timestart.strftime("%Y-%m-%d %H-%M-%S")
+
+timeend = datetime.datetime.now() + timedelta(hours=24)
+timeend = timeend.strftime("%Y-%m-%d %H-%M-%S")
 
 
 #Settings window
@@ -13,11 +22,15 @@ def settings_window(settings):
          sg.Input(settings["LOC"]["longitude"], s=8, key="-LON-"),
          sg.Input(settings["LOC"]["altitude"], s=8, key="-ALT-"),],
 
-        [sg.Text("Default spacecraft ID:")],
+        [sg.Text("Default settings:")],
+        [sg.Text("Spacecraft ID:")],
         [sg.Input(settings["SCID"]["default_spacecraft"], s=22, key="-SCID-")],
 
-        [sg.Text("Default time step:")], 
-        [sg.Input(settings["DTS"]["default_timestep"], s=4, key="-DTS-")],
+        [sg.Text("Time step:")], 
+        [sg.Input(settings["TIME"]["default_timestep"], s=4, key="-DTS-")],
+
+        [sg.Text("Prediction span(H):")],
+        [sg.Input(settings["TIME"]["default_timespan"], s=26, key="-TIMESPAN-")],
 
         [sg.Button("Save", key="-SAVE-", s=20)]
 
@@ -41,7 +54,9 @@ def settings_window(settings):
 
             settings["SCID"]["default_spacecraft"] = values["-SCID-"]
 
-            settings["DTS"]["default_timestep"] = values["-DTS-"]
+            settings["TIME"]["default_timestep"] = values["-DTS-"]
+
+            settings["TIME"]["default_timespan"] = values["-TIMESPAN-"]
 
             break
     window.close()
@@ -57,10 +72,10 @@ def main_window():
         [sg.Input(settings["SCID"]["default_spacecraft"], key="-SCID-", size=(14))],
 
         [sg.Text("From (YYYY-mm-dd HH-MM-SS):"), sg.Text("Time step:")],
-        [sg.Input(key="-PSTART-", size=(26)), sg.Input(settings["DTS"]["default_timestep"], key="-STEP-", size=(10))],
+        [sg.Input(timestart, key="-PSTART-", size=(26)), sg.Input(settings["TIME"]["default_timestep"], key="-STEP-", size=(10))],
 
         [sg.Text("To (YYYY-mm-dd HH-MM-SS):")],
-        [sg.Input(key="-END-", size=(26))],
+        [sg.Input(timeend, key="-END-", size=(26))],
 
         [sg.Button("Run!", key="-START-"), sg.Button("Settings", key="-SET-")],
 
@@ -76,6 +91,9 @@ def main_window():
 
         #Execute GetAZEL if Start button pressed
         if event == '-START-':
+
+            with open('temp.txt','w') as f: #Clears the temp.txt file
+                    f.write("")
             #This code processes epheris data from JPL horizons
             #This code was written by Wyattaw and modified by mnux
             from astroquery.jplhorizons import Horizons
@@ -110,6 +128,16 @@ def main_window():
             for (T, A, E) in zip(timeList, azList, elList):
                 if E >= minEl:
                     print(T, A, E) #Terminal printout, T= UTC Time, A=Az, E=El,
+
+                if E>= minEl:
+                    with open('temp.txt','a') as f: #Writes the values to the tepm.txt file
+                        f.write(T)
+                        f.write(" ")
+                        f.write(str(A))
+                        f.write(" ")
+                        f.write(str(E))
+                        f.write("\n")
+
             # change az from deg to rad
             polarAzList = []
             for p in azList:
