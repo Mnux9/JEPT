@@ -2,26 +2,72 @@ import PySimpleGUI as sg
 from pathlib import Path
 
 
+#Settings window
+def settings_window(settings):
+    #Settings layout
+    layout = [
+
+        [sg.Text("Location:")],
+        [sg.Text("Latitude:"), sg.Text("Longitude:"), sg.Text("Altitude:")],
+        [sg.Input(settings["LOC"]["latitude"], s=8, key="-LAT-"),
+         sg.Input(settings["LOC"]["longitude"], s=8, key="-LON-"),
+         sg.Input(settings["LOC"]["altitude"], s=8, key="-ALT-"),],
+
+        [sg.Text("Default spacecraft ID:")],
+        [sg.Input(settings["SCID"]["default_spacecraft"], s=22, key="-SCID-")],
+
+        [sg.Text("Default time step:")], 
+        [sg.Input(settings["DTS"]["default_timestep"], s=4, key="-DTS-")],
+
+        [sg.Button("Save", key="-SAVE-", s=20)]
+
+    ]
+
+    #create settings window
+    window = sg.Window("JEPT Settings", layout, modal=True)
+
+    while True:
+        event, values = window.read()
+        
+        if event == sg.WINDOW_CLOSED:
+            break
+
+        #settings
+        if event == '-SAVE-':
+            #write to ini file
+            settings["LOC"]["latitude"] = values["-LAT-"]
+            settings["LOC"]["laongitude"] = values["-LON-"]
+            settings["LOC"]["altitude"] = values["-ALT-"]
+
+            settings["SCID"]["default_spacecraft"] = values["-SCID-"]
+
+            settings["DTS"]["default_timestep"] = values["-DTS-"]
+
+            break
+    window.close()
+
+
+
+#Main window
 def main_window():
-    #UI LAYOUT
+    #Main LAYOUT
     layout = [
 
         [sg.Text("Spacecraft ID:")],
-        [sg.Input(key="-SCID-", size=(14,1))],
+        [sg.Input(settings["SCID"]["default_spacecraft"], key="-SCID-", size=(14))],
 
         [sg.Text("From (YYYY-mm-dd HH-MM-SS):"), sg.Text("Time step:")],
-        [sg.Input(key="-FRM-", size=(26,1)), sg.Input(key="-STEP-", size=(10,1))],
+        [sg.Input(key="-PSTART-", size=(26)), sg.Input(settings["DTS"]["default_timestep"], key="-STEP-", size=(10))],
 
         [sg.Text("To (YYYY-mm-dd HH-MM-SS):")],
-        [sg.Input(key="-TO-", size=(26,1))],
+        [sg.Input(key="-END-", size=(26))],
 
-        [sg.Button("START!", key="-START-")]
+        [sg.Button("Run!", key="-START-"), sg.Button("Settings", key="-SET-")],
+
     ]
 
-
-
-    #create window
-    window = sg.Window("JPL EPHEMRIS PROCESSING TOOL (J.E.P.T.)", layout, )
+    #create main window
+    window = sg.Window("JPL EPHEMRIS PROCESSING TOOL (J.E.P.T.)", layout)
 
 
     #create an even loop
@@ -36,15 +82,15 @@ def main_window():
             import matplotlib.pyplot as plt
             import numpy as np
             # set your lat/long/elevation
-            home = {'lat': int(settings["LOC"]["latitude"]), 'lon': int(settings["LOC"]["longitude"]), 'elevation': int(settings["LOC"]["elevation"])}
+            home = {'lat': int(settings["LOC"]["latitude"]), 'lon': int(settings["LOC"]["longitude"]), 'elevation': int(settings["LOC"]["altitude"])}
             # set minimum el to search above
             minEl = 0
             # create object to query horizons website
             obj = Horizons(id= values['-SCID-'],
                         location=home,
                         epochs={
-                            'start': values['-FRM-'],
-                            'stop': values['-TO-'],
+                            'start': values['-PSTART-'],
+                            'stop': values['-END-'],
                             'step': values['-STEP-']
                         })
             # get ephemris from query
@@ -94,6 +140,10 @@ def main_window():
 
             plt.show()
 
+
+        #Open settings if settings button is pressed
+        if event == '-SET-':
+            settings_window(settings)
 
 
         #end program if user closes window
