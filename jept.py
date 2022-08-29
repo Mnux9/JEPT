@@ -2,6 +2,11 @@ import PySimpleGUI as sg
 from pathlib import Path
 import datetime
 from datetime import timedelta
+import matplotlib.animation as animation
+from astroquery.jplhorizons import Horizons
+import matplotlib.pyplot as plt
+import numpy as np
+import os
 
 
 timestart = datetime.datetime.now()
@@ -85,6 +90,7 @@ def main_window():
     window = sg.Window("JPL EPHEMRIS PROCESSING TOOL (J.E.P.T.)", layout)
 
 
+
     #create an even loop
     while True:
         event, values = window.read()
@@ -92,18 +98,24 @@ def main_window():
         #Execute GetAZEL if Start button pressed
         if event == '-START-':
 
-            with open('temp.txt','w') as f: #Clears the temp.txt file
-                    f.write("")
+            settings["SCID"]["spacecraft"] = values["-SCID-"]
+
+            
+            os.system("python3 assets/live.py")
+
+
+
+
+
             #This code processes epheris data from JPL horizons
             #This code was written by Wyattaw and modified by mnux
-            from astroquery.jplhorizons import Horizons
-            import matplotlib.pyplot as plt
-            import numpy as np
+            
             # set your lat/long/elevation
             home = {'lat': int(settings["LOC"]["latitude"]), 'lon': int(settings["LOC"]["longitude"]), 'elevation': int(settings["LOC"]["altitude"])}
             # set minimum el to search above
             minEl = 0
             # create object to query horizons website
+            # prediction of the whole pass/es
             obj = Horizons(id= values['-SCID-'],
                         location=home,
                         epochs={
@@ -114,8 +126,7 @@ def main_window():
             # get ephemris from query
             eph = obj.ephemerides()
             # make 3 lists for time, az, and el. Then print all of them together,
-            # so the az el and time all line up. Only print when object is above
-            # horizon
+            # so the az el and time all line up. Only print when object is above horizon
             azList = []
             elList = []
             timeList = []
@@ -127,26 +138,18 @@ def main_window():
                 elList.append(p)
             for (T, A, E) in zip(timeList, azList, elList):
                 if E >= minEl:
-                    print(T, A, E) #Terminal printout, T= UTC Time, A=Az, E=El,
-
-                if E>= minEl:
-                    with open('temp.txt','a') as f: #Writes the values to the tepm.txt file
-                        f.write(T)
-                        f.write(" ")
-                        f.write(str(A))
-                        f.write(" ")
-                        f.write(str(E))
-                        f.write("\n")
+                    print(T, A, E) #Terminal printout, T=Time, A=Az, E=El,
 
             # change az from deg to rad
             polarAzList = []
             for p in azList:
                 polarAzList.append(np.deg2rad(p))
 
+
             # plot az el graph
             # need to find way to include time
             # plot
-            fig = plt.figure()
+            fig = plt.figure(values['-SCID-'])
             ax = plt.subplot(121)
             ax.set_ylim(0, 90)
             ax.set_xlim(0, 360)
@@ -156,7 +159,7 @@ def main_window():
             ax.grid(True)
             ax.plot(azList, elList)
 
-            # make polar graph
+
             ax2 = plt.subplot(122, projection='polar')
             # make 90deg  in middle, 0deg on outside
             ax2.set_rlim(bottom=90, top=0)
@@ -166,9 +169,62 @@ def main_window():
             ax2.set_theta_direction(-1)
             ax2.plot(polarAzList, elList)
 
+            ax2 = plt.subplot(122, projection='polar')
+            # make 90deg  in middle, 0deg on outside
+            ax2.set_rlim(bottom=90, top=0)
+            #rotate so 0deg AZ is on top
+            ax2.set_theta_zero_location('N')
+            # make theta increase clockwise
+            ax2.set_theta_direction(-1)
+            ax2.plot(polarAzList, elList)
+
+
+
+            ax1 = plt.subplot(122, projection='polar')
+
+            def animate(i):
+
+
+                graph_data = open('assets/temp.txt','r').read()
+                lines = graph_data.split('\n')
+                xs = []
+                ys = []
+                polarAzList = []
+
+                ax1.clear()
+
+                for line in lines:
+                    if len(line) > 1:
+                        x, y = line.split(',')
+                        xs.append(float(x))
+                        ys.append(float(y))
+    
+                for p in xs:
+                    polarAzList.append(np.deg2rad(p))
+                
+
+                # make 90deg  in middle, 0deg on outside
+                ax1.set_rlim(bottom=90, top=0)
+                #rotate so 0deg AZ is on top
+                ax1.set_theta_zero_location('N')
+                # make theta increase clockwise
+                ax1.set_theta_direction(-1)
+
+                ax1.scatter(polarAzList, ys)
+
+            ani = animation.FuncAnimation(fig, animate, interval=1000)
             plt.show()
 
 
+
+
+            #live
+            
+
+
+           
+       
+          
         #Open settings if settings button is pressed
         if event == '-SET-':
             settings_window(settings)
@@ -185,7 +241,7 @@ if __name__ == "__main__":
     SETTINGS_PATH = Path.cwd()
     #create setting object and use ini format
     settings = sg.UserSettings(
-        path=SETTINGS_PATH, filename="config.ini", use_config_file=True, convert_bools_and_none=True
+        path=SETTINGS_PATH, filename="assets/config.ini", use_config_file=True, convert_bools_and_none=True
     )
 
 theme = settings["GUI"]["theme"]
