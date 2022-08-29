@@ -10,3 +10,8 @@ This is a tool for viewing azimuth and eleveation of selected spacecraft from ep
 Add offline support
 
 Add rotator support
+
+
+#TO FIX:
+
+Display the end time in UTC too
