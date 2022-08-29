@@ -1,7 +1,5 @@
 import configparser
 from pathlib import Path
-import datetime
-from datetime import timedelta
 from astroquery.jplhorizons import Horizons
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,9 +11,11 @@ config.read('config.ini')
 
 
 
-
 with open('temp.txt','w') as f: #Clears the temp.txt file
                 f.write("")
+
+print(config.get('LOC','Latitude'), config.get('LOC','Longitude'), config.get('LOC','Altitude'))
+print(config.get('SCID','spacecraft'))
 
 
 while True:
@@ -24,16 +24,16 @@ while True:
     #This code was written by Wyattaw and modified by mnux
 
     # set your lat/long/elevation
-    home = {'lat': 50, 'lon': 16, 'elevation': 0}
+    home = {'lat': int(config.get('LOC','Latitude')), 'lon': int(config.get('LOC','Longitude')), 'elevation': int(config.get('LOC','Altitude'))}
     # set minimum el to search above
     minEl = 0
     # create object to query horizons website
     # prediction of the whole pass/es
     
 
-    obj = Horizons(id= 'SOHO',
-                    location=home,
-                    epochs=None)
+    obj = Horizons(id= config.get('SCID','Spacecraft'),
+                        location=home,
+                        epochs=None)
         # get ephemris from query
     eph = obj.ephemerides()
         # make 3 lists for time, az, and el. Then print all of them together,
@@ -49,16 +49,17 @@ while True:
         elList.append(p)
     for (T, A, E) in zip(timeList, azList, elList):
         if E >= minEl:
-            with open('temp.txt','w') as f: #Writes the values to the tepm.txt file
 
-                print(A,E)
+            print(T,A,E)
+
+            with open('temp.txt','w') as f: #Writes the values to the tepm.txt file                
 
                 f.write(str(A))
                 f.write(",")
                 f.write(str(E))
                 f.write("\n")
 
-time.sleep(4)
+time.sleep(3)
 
            
        

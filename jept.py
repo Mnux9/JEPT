@@ -10,7 +10,8 @@ import os
 
 
 timestart = datetime.datetime.now()
-timestart = timestart.strftime("%Y-%m-%d %H-%M-%S")
+timestart = datetime.datetime.utcnow().strftime("%Y-%m-%d %H-%M-%S")
+
 
 timeend = datetime.datetime.now() + timedelta(hours=24)
 timeend = timeend.strftime("%Y-%m-%d %H-%M-%S")
@@ -54,7 +55,7 @@ def settings_window(settings):
         if event == '-SAVE-':
             #write to ini file
             settings["LOC"]["latitude"] = values["-LAT-"]
-            settings["LOC"]["laongitude"] = values["-LON-"]
+            settings["LOC"]["longitude"] = values["-LON-"]
             settings["LOC"]["altitude"] = values["-ALT-"]
 
             settings["SCID"]["default_spacecraft"] = values["-SCID-"]
@@ -101,7 +102,7 @@ def main_window():
             settings["SCID"]["spacecraft"] = values["-SCID-"]
 
             
-            os.system("python3 assets/live.py")
+            
 
 
 
@@ -219,7 +220,7 @@ def main_window():
 
 
             #live
-            
+
 
 
            
