@@ -2,7 +2,9 @@
 Nasa JPL EPHEMRIS PROCESSING TOOL
 
 
-This is a tool for viewing azimuth and eleveation of selected spacecraft from ephermis data based on entered QTH location.
+This is a tool for viewing azimuth and eleveation of selected spacecraft from JPL ephermis data based on entered QTH location.
+
+The ephems are pulled live from Nasa JPL so it wont work without interntet connection for now.
 
 Keep in mind that this code is still not done, needs a lot of changes and features but it somewhat works.
 
