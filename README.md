@@ -29,3 +29,5 @@ Automaticaly run the live.py scirpit if "Run" is pressed in jept.py
 # To fix:
 
 Make the Prediction end time in UTC too, in local for now
+
+Default prediction time in settings
