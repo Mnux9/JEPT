@@ -6,7 +6,7 @@ import matplotlib.animation as animation
 from astroquery.jplhorizons import Horizons
 import matplotlib.pyplot as plt
 import numpy as np
-import os
+import subprocess
 
 
 timestart = datetime.datetime.now()
