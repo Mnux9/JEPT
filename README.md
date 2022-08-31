@@ -13,9 +13,7 @@ Keep in mind that this code is still not done, needs a lot of changes and featur
 # How to run:
 
 dependencies: pysimplegui, pathlib, datetime, astroquery, numpy, configpraser
-run by:   ```sh
-  npm install npm@latest -g
-  ```
+run on linux: ```python3 jept.py```
 
 
 # To do:
