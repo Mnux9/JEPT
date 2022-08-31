@@ -10,8 +10,11 @@ Keep in mind that this code is still not done, needs a lot of changes and featur
 
 ![shutter tap](https://github.com/Mnux9/JEPT/blob/main/Images/UI.png)
 
+# How to run:
 
-# TO DO:
+dependencies: pysimplegui, pathlib, datetime, astroquery, numpy, configpraser
+
+# To do:
 
 Add offline support
 
@@ -20,6 +23,6 @@ Add rotator support
 Automaticaly run the live.py scirpit if "Run" is pressed in jept.py
 
 
-# TO FIX:
+# To fix:
 
 Make the Prediction end time in UTC too, in local for now
