@@ -74,11 +74,11 @@ def main_window():
     #Main LAYOUT
     layout = [
 
-        [sg.Text("Spacecraft ID:")],
-        [sg.Input(settings["SCID"]["default_spacecraft"], key="-SCID-", size=(14))],
+        [sg.Text("Spacecraft ID:"),sg.Text("Time step:")],
+        [sg.Input(settings["SCID"]["default_spacecraft"], key="-SCID-", size=(14)), sg.Input(settings["TIME"]["default_timestep"], key="-STEP-", size=(10))],
 
-        [sg.Text("From (YYYY-mm-dd HH-MM-SS):"), sg.Text("Time step:")],
-        [sg.Input(timestart, key="-PSTART-", size=(26)), sg.Input(settings["TIME"]["default_timestep"], key="-STEP-", size=(10))],
+        [sg.Text("From (YYYY-mm-dd HH-MM-SS):")],
+        [sg.Input(timestart, key="-PSTART-", size=(26))],
 
         [sg.Text("To (YYYY-mm-dd HH-MM-SS):")],
         [sg.Input(timeend, key="-END-", size=(26))],
