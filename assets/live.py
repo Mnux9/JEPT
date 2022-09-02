@@ -24,7 +24,7 @@ while True:
     #This code was written by Wyattaw and modified by mnux
 
     # set your lat/long/elevation
-    home = {'lat': int(config.get('LOC','Latitude')), 'lon': int(config.get('LOC','Longitude')), 'elevation': int(config.get('LOC','Altitude'))}
+    home = {'lat': float(config.get('LOC','Latitude')), 'lon': float(config.get('LOC','Longitude')), 'elevation': float(config.get('LOC','Altitude'))}
     # set minimum el to search above
     minEl = 0
     # create object to query horizons website
