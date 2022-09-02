@@ -16,6 +16,8 @@ dependencies: pysimplegui, pathlib, datetime, astroquery, numpy, configpraser
 
 run on linux: ```python3 jept.py```
 
+and click Run!
+
 configure settings
 
 
