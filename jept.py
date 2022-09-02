@@ -112,7 +112,7 @@ def main_window():
             #This code was written by Wyattaw and modified by mnux
             
             # set your lat/long/elevation
-            home = {'lat': int(settings["LOC"]["latitude"]), 'lon': int(settings["LOC"]["longitude"]), 'elevation': int(settings["LOC"]["altitude"])}
+            home = {'lat': float(settings["LOC"]["latitude"]), 'lon': float(settings["LOC"]["longitude"]), 'elevation': float(settings["LOC"]["altitude"])}
             # set minimum el to search above
             minEl = 0
             # create object to query horizons website
