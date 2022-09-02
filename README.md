@@ -15,9 +15,7 @@ Keep in mind that this code is still not done, needs a lot of changes and featur
 dependencies: pysimplegui, pathlib, datetime, astroquery, numpy, configpraser
 
 run on linux: ```python3 jept.py```
-
 and click Run!
-
 configure settings
 
 
