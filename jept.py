@@ -7,7 +7,11 @@ from astroquery.jplhorizons import Horizons
 import matplotlib.pyplot as plt
 import numpy as np
 import subprocess
+import configparser
 
+config = configparser.ConfigParser()
+
+config.read('assets/config.ini')
 
 timestart = datetime.datetime.now()
 timestart = datetime.datetime.utcnow().strftime("%Y-%m-%d %H-%M-%S")
@@ -101,11 +105,9 @@ def main_window():
 
             settings["SCID"]["spacecraft"] = values["-SCID-"]
 
-            
-            
-
-
-
+            #Clears the temp.txt file
+            with open('temp.txt','w') as f:
+                f.write("")
 
 
             #This code processes epheris data from JPL horizons
@@ -179,11 +181,48 @@ def main_window():
             ax2.set_theta_direction(-1)
             ax2.plot(polarAzList, elList)
 
-
-
             ax1 = plt.subplot(122, projection='polar')
 
+            #Live polar plot
             def animate(i):
+
+                #This code gets live position from JPL and writes it to file
+                home = {'lat': float(config.get('LOC','Latitude')), 'lon': float(config.get('LOC','Longitude')), 'elevation': float(config.get('LOC','Altitude'))}
+                # set minimum el to search above
+                minEl = 0
+                # create object to query horizons website
+                # prediction of the whole pass/es
+                
+
+                obj = Horizons(id= config.get('SCID','Spacecraft'),
+                                    location=home,
+                                    epochs=None)
+                    # get ephemris from query
+                eph = obj.ephemerides()
+                    # make 3 lists for time, az, and el. Then print all of them together,
+                    # so the az el and time all line up. Only print when object is above horizon
+                azList = []
+                elList = []
+                timeList = []
+                for p in eph['datetime_str']:
+                    timeList.append(p)
+                for p in eph['AZ']:
+                    azList.append(p)
+                for p in eph['EL']:
+                    elList.append(p)
+                for (T, A, E) in zip(timeList, azList, elList):
+                    if E >= minEl:
+
+                        print(T,A,E)
+
+                        with open('assets/temp.txt','w') as f: #Writes the values to the tepm.txt file                
+
+                            f.write(str(A))
+                            f.write(",")
+                            f.write(str(E))
+                            f.write("\n")
+
+
 
 
                 graph_data = open('assets/temp.txt','r').read()
@@ -202,6 +241,7 @@ def main_window():
     
                 for p in xs:
                     polarAzList.append(np.deg2rad(p))
+                    
                 
 
                 # make 90deg  in middle, 0deg on outside
@@ -217,15 +257,47 @@ def main_window():
             plt.show()
 
 
+            #This code processes epheris data from JPL horizons
+            #This code was written by Wyattaw and modified by mnux
 
+            # set your lat/long/elevation
+            home = {'lat': float(config.get('LOC','Latitude')), 'lon': float(config.get('LOC','Longitude')), 'elevation': float(config.get('LOC','Altitude'))}
+            # set minimum el to search above
+            minEl = 0
+            # create object to query horizons website
+            # prediction of the whole pass/es
+            
 
-            #live
+            obj = Horizons(id= config.get('SCID','Spacecraft'),
+                                location=home,
+                                epochs=None)
+                # get ephemris from query
+            eph = obj.ephemerides()
+                # make 3 lists for time, az, and el. Then print all of them together,
+                # so the az el and time all line up. Only print when object is above horizon
+            azList = []
+            elList = []
+            timeList = []
+            for p in eph['datetime_str']:
+                timeList.append(p)
+            for p in eph['AZ']:
+                azList.append(p)
+            for p in eph['EL']:
+                elList.append(p)
+            for (T, A, E) in zip(timeList, azList, elList):
+                if E >= minEl:
 
+                    print(T,A,E)
 
+                    with open('temp.txt','w') as f: #Writes the values to the tepm.txt file                
+
+                        f.write(str(A))
+                        f.write(",")
+                        f.write(str(E))
+                        f.write("\n")
 
            
        
-          
         #Open settings if settings button is pressed
         if event == '-SET-':
             settings_window(settings)
