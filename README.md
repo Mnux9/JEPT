@@ -25,8 +25,6 @@ Add offline support
 
 Add rotator support
 
-Automaticaly run the live.py scirpit if "Run" is pressed in jept.py
-
 
 # To fix:
 
