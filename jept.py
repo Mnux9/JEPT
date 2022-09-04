@@ -186,21 +186,16 @@ def main_window():
             #Live polar plot
             def animate(i):
 
-                #This code gets live position from JPL and writes it to file
-                home = {'lat': float(config.get('LOC','Latitude')), 'lon': float(config.get('LOC','Longitude')), 'elevation': float(config.get('LOC','Altitude'))}
-                # set minimum el to search above
-                minEl = 0
-                # create object to query horizons website
-                # prediction of the whole pass/es
-                
+                    # create object to query horizons website
+                obj = Horizons(id='-61',
+                            location=home,
+                            epochs= None)
 
-                obj = Horizons(id= config.get('SCID','Spacecraft'),
-                                    location=home,
-                                    epochs=None)
-                    # get ephemris from query
+                # get ephemris from query
                 eph = obj.ephemerides()
-                    # make 3 lists for time, az, and el. Then print all of them together,
-                    # so the az el and time all line up. Only print when object is above horizon
+                # make 3 lists for time, az, and el. Then print all of them together,
+                # so the az el and time all line up. Only print when object is above
+                # horizon
                 azList = []
                 elList = []
                 timeList = []
@@ -212,8 +207,7 @@ def main_window():
                     elList.append(p)
                 for (T, A, E) in zip(timeList, azList, elList):
                     if E >= minEl:
-
-                        print(T,A,E)
+                        print(T, A, E)
 
                         with open('assets/temp.txt','w') as f: #Writes the values to the tepm.txt file                
 
@@ -257,16 +251,9 @@ def main_window():
             plt.show()
 
 
-            #This code processes epheris data from JPL horizons
+            #This pulls live epheris data from JPL horizons
             #This code was written by Wyattaw and modified by mnux
 
-            # set your lat/long/elevation
-            home = {'lat': float(config.get('LOC','Latitude')), 'lon': float(config.get('LOC','Longitude')), 'elevation': float(config.get('LOC','Altitude'))}
-            # set minimum el to search above
-            minEl = 0
-            # create object to query horizons website
-            # prediction of the whole pass/es
-            
 
             obj = Horizons(id= config.get('SCID','Spacecraft'),
                                 location=home,
