@@ -187,7 +187,7 @@ def main_window():
             def animate(i):
 
                     # create object to query horizons website
-                obj = Horizons(id='-61',
+                obj = Horizons(id=values['-SCID-'],
                             location=home,
                             epochs= None)
 
