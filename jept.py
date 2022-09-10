@@ -42,6 +42,9 @@ def settings_window(settings):
         [sg.Text("Prediction span(H):")],
         [sg.Input(settings["TIME"]["default_timespan"], s=26, key="-TIMESPAN-")],
 
+        [sg.Text("Rotator controller:")],
+        [sg.Input(settings["ROT"]["controller_path"], s=26, key="-CTRLPATH-")],
+
         [sg.Button("Save", key="-SAVE-", s=20)]
 
     ]
@@ -67,6 +70,8 @@ def settings_window(settings):
             settings["TIME"]["default_timestep"] = values["-DTS-"]
 
             settings["TIME"]["default_timespan"] = values["-TIMESPAN-"]
+
+            settings["ROT"]["controller_path"] = values["-CTRLPATH-"]
 
             break
     window.close()
