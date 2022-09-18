@@ -92,7 +92,7 @@ def main_window():
         [sg.Text("To (YYYY-mm-dd HH-MM-SS):")],
         [sg.Input(timeend, key="-END-", size=(26))],
 
-        [sg.Button("Run!", key="-START-"), sg.Button("Settings", key="-SET-")],
+        [sg.Button("Run!", key="-START-"), sg.Button("Settings", key="-SET-"), sg.Checkbox('Rotator:', key="-ROT-", default=False)]
 
     ]
 
@@ -251,6 +251,12 @@ def main_window():
                 ax1.set_theta_direction(-1)
 
                 ax1.scatter(polarAzList, ys)
+
+
+                #Rotator commands
+                if event == '-ROT-':
+                    #Code that will send AZ EL through serial coming here
+
 
             ani = animation.FuncAnimation(fig, animate, interval=1000)
             plt.show()
