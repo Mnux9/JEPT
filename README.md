@@ -30,6 +30,8 @@ Add rotator support
 
 # To fix:
 
+Get rid of the need for the temp.text file.
+
 Make the Prediction end time in UTC too, in local for now
 
 ✅fix the lat/long GUI settings (thanks Wyattaw!)
