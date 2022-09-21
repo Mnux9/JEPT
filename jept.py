@@ -254,48 +254,15 @@ def main_window():
 
 
                 #Rotator commands
-                if event == '-ROT-':
+                #if event == '-ROT-':
                     #Code that will send AZ EL through serial coming here
+                 #   print=("rot")
 
 
             ani = animation.FuncAnimation(fig, animate, interval=1000)
             plt.show()
 
 
-            #This pulls live epheris data from JPL horizons
-            #This code was written by Wyattaw and modified by mnux
-
-
-            obj = Horizons(id= config.get('SCID','Spacecraft'),
-                                location=home,
-                                epochs=None)
-                # get ephemris from query
-            eph = obj.ephemerides()
-                # make 3 lists for time, az, and el. Then print all of them together,
-                # so the az el and time all line up. Only print when object is above horizon
-            azList = []
-            elList = []
-            timeList = []
-            for p in eph['datetime_str']:
-                timeList.append(p)
-            for p in eph['AZ']:
-                azList.append(p)
-            for p in eph['EL']:
-                elList.append(p)
-            for (T, A, E) in zip(timeList, azList, elList):
-                if E >= minEl:
-
-                    print(T,A,E)
-
-                    with open('temp.txt','w') as f: #Writes the values to the tepm.txt file                
-
-                        f.write(str(A))
-                        f.write(",")
-                        f.write(str(E))
-                        f.write("\n")
-
-           
-       
         #Open settings if settings button is pressed
         if event == '-SET-':
             settings_window(settings)
