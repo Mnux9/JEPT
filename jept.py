@@ -254,9 +254,9 @@ def main_window():
 
 
                 #Rotator commands
-                #if event == '-ROT-':
+                if event == '-ROT-':
                     #Code that will send AZ EL through serial coming here
-                 #   print=("rot")
+                    print("rot")
 
 
             ani = animation.FuncAnimation(fig, animate, interval=1000)
