@@ -30,7 +30,7 @@ Add rotator support
 
 # To fix:
 
-Fix the time step settings + implement user it into live.
+Fix the time step settings + implement it into live.
 
 Get rid of the need for the temp.text file.
 
