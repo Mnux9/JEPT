@@ -208,6 +208,7 @@ def main_window():
                 azList = []
                 elList = []
                 timeList = []
+                auList = []
                 for p in eph['datetime_str']:
                     timeList.append(p)
                 for p in eph['AZ']:
