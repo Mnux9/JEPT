@@ -9,6 +9,19 @@ import numpy as np
 import subprocess
 import configparser
 
+print("Welcome to:")
+print("       _ ______ _____ _______ ")
+print("      | |  ____|  __ \__   __|")
+print("      | | |__  | |__) | | |   ")
+print("  _   | |  __| |  ___/  | |   ")
+print(" | |__| | |____| |      | |   ")
+print("  \____/|______|_|      |_|   ")
+
+print(" ")
+print("by: Mnux [OK1NYA], Wyattaw [KF0CJJ], Felix [OK9UWU]")#Credits
+print(" ")
+print(" ")
+
 config = configparser.ConfigParser()
 
 config.read('assets/config.ini')
@@ -101,6 +114,7 @@ def main_window():
 
 
 
+
     #create an even loop
     while True:
         event, values = window.read()
@@ -131,14 +145,21 @@ def main_window():
                             'stop': values['-END-'],
                             'step': values['-STEP-']
                         })
+            print("Downloading prediction...")
+            print("DATE        TIME     AZIMUTH    ELEVAT.   DISTANCE")#PRINT THE LEGEND
+            print(" ")#PRINT THE LEGEND
             # get ephemris from query
             eph = obj.ephemerides()
+
             # make 3 lists for time, az, and el. Then print all of them together,
+
+
             # so the az el and time all line up. Only print when object is above horizon
             azList = []
             elList = []
             timeList = []
             auList = []
+
             for p in eph['datetime_str']:
                 timeList.append(p)
             for p in eph['AZ']:
@@ -151,7 +172,11 @@ def main_window():
             for (T, A, E, d) in zip(timeList, azList, elList, auList):
                 if E >= minEl:
                     print(T, A, E, d) #Terminal printout, T=Time, A=Az, E=El,
-
+            print("---END OF PREDICTION--:")#PRINT THE LEGEND
+            print(" ")#PRINT THE LEGEND
+            print("Live data:")#PRINT THE LEGEND
+            print("DATE        TIME     AZIMUTH    ELEVAT.   DISTANCE")#PRINT THE LEGEND
+            print(" ")#PRINT THE LEGEND
             # change az from deg to rad
             polarAzList = []
             for p in azList:
@@ -222,6 +247,7 @@ def main_window():
                     if E >= minEl:
                         print(T, A, E, d)
 
+
                         with open('assets/temp.txt','w') as f: #Writes the values to the tepm.txt file                
 
                             f.write(str(A))
@@ -267,7 +293,7 @@ def main_window():
                     print("rot")
 
 
-            ani = animation.FuncAnimation(fig, animate, interval=1000)
+            ani = animation.FuncAnimation(fig, animate, interval=1000, cache_frame_data=False)
             plt.show()
 
 
