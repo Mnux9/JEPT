@@ -138,15 +138,19 @@ def main_window():
             azList = []
             elList = []
             timeList = []
+            auList = []
             for p in eph['datetime_str']:
                 timeList.append(p)
             for p in eph['AZ']:
                 azList.append(p)
             for p in eph['EL']:
                 elList.append(p)
-            for (T, A, E) in zip(timeList, azList, elList):
+            for p in eph['delta']:
+                p = p * 149597870.7
+                auList.append(p)
+            for (T, A, E, d) in zip(timeList, azList, elList, auList):
                 if E >= minEl:
-                    print(T, A, E) #Terminal printout, T=Time, A=Az, E=El,
+                    print(T, A, E, d) #Terminal printout, T=Time, A=Az, E=El,
 
             # change az from deg to rad
             polarAzList = []
@@ -204,15 +208,19 @@ def main_window():
                 azList = []
                 elList = []
                 timeList = []
+                auList = []
                 for p in eph['datetime_str']:
                     timeList.append(p)
                 for p in eph['AZ']:
                     azList.append(p)
                 for p in eph['EL']:
                     elList.append(p)
-                for (T, A, E) in zip(timeList, azList, elList):
+                for p in eph['delta']:
+                    p = p * 149597870.7
+                    auList.append(p)
+                for (T, A, E, d) in zip(timeList, azList, elList, auList):
                     if E >= minEl:
-                        print(T, A, E)
+                        print(T, A, E, d)
 
                         with open('assets/temp.txt','w') as f: #Writes the values to the tepm.txt file                
 
