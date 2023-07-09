@@ -27,14 +27,6 @@ Add offline support
 
 Add rotator support
 
+Make the Prediction end time in UTC too, in **local** for now
 
-# To fix:
-
-Fix the time step settings + implement it into live.
-
-Get rid of the need for the temp.text file.
-
-Make the Prediction end time in UTC too, in local for now
-
-✅fix the lat/long GUI settings (thanks Wyattaw!)
 
